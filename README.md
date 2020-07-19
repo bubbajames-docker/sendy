@@ -3,7 +3,7 @@ This is the unofficial Sendy docker repository.
 
 <a href="https://sendy.co/?ref=Hcurv" title=""><img src="https://sendy.co/images/banners/728x90_var2.jpg" alt="Check out Sendy, a self hosted newsletter app that lets you send emails 100x cheaper via Amazon SES." width="728" height="90"/></a>
 
-* Maintained by: [the Sendy Community](https://sendy.co/forum)
+* Maintained by: [Sendy Users](https://github.com/bubbajames-docker/sendy)
 
 * Where to get help: [the Sendy Troubleshooting & Support Guide](https://sendy.co/troubleshooting), [the Sendy Community Forums](https://sendy.co/forum)
 
@@ -13,9 +13,9 @@ This is the unofficial Sendy docker repository.
 * `4.1.0` `4.1` `latest`
 
 # Quick reference (cont.)
-* Where to file docker-related issues: [https://github.com/bubbajames-docker/sendy](https://github.com/bubbajames-docker/sendy)
+* Where to file docker-related issues: [https://github.com/bubbajames-docker/sendy/issues](https://github.com/bubbajames-docker/sendy/issues)
 
-* Where to file Send application issues: see [the Sendy Troubleshooting & Support Guide](https://sendy.co/troubleshooting)
+* Where to file application issues: see [the Sendy Troubleshooting & Support Guide](https://sendy.co/troubleshooting)
 
 # What is Sendy?
 Sendy is a self-hosted email newsletter application that lets you send trackable emails via [Amazon Simple Email Service (SES)](http://aws.amazon.com/ses/). This makes it possible for you to send authenticated bulk emails at an insanely low price without sacrificing deliverability.
