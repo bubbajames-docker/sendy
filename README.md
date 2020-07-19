@@ -10,7 +10,7 @@ This is the unofficial Sendy docker repository.
 * License Required: [Purchasing details](https://sendy.co/?ref=Hcurv)
 
 # Supported tags and respective Dockerfile links
-* `4.1.0` `4.1` `4` `latest`
+* `4.1.0` `4.1` `latest`
 
 # Quick reference (cont.)
 * Where to file docker-related issues: [https://github.com/bubbajames-docker/sendy](https://github.com/bubbajames-docker/sendy)
