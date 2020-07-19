@@ -27,7 +27,7 @@ COPY ./artifacts/${SENDY_VER}/ /tmp
 
 # Install Sendy
 RUN unzip /tmp/sendy-${SENDY_VER}.zip -d /tmp \
-  && mv /tmp/config.php /tmp/sendy/includes \
+  && mv /tmp/includes/* /tmp/sendy/includes \
   && chmod 777 /tmp/sendy/uploads \
   && rm -rf /var/www/html \
   && mv /tmp/sendy /var/www/html \
