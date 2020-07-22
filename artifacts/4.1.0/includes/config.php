@@ -4,7 +4,7 @@
 //----------------------------------------------------------------------------------//
 
 /*  Set the URL to your Sendy installation (without the trailing slash) */
-define('APP_PATH', 'http://' . getenv('SENDY_FQDN'));
+define('APP_PATH', getenv('SENDY_PROTOCOL') . '://' . getenv('SENDY_FQDN'));
 
 /*  MySQL database connection credentials (please place values between the apostrophes) */
 $dbHost = getenv('MYSQL_HOST'); //MySQL Hostname
