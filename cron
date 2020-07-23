@@ -1,0 +1,8 @@
+# schedule campaigns
+*/5 * * * * curl -i http://localhost/scheduled.php >> /var/log/cron.log 2>&1
+
+# autoresponders
+*/1 * * * * curl -i http://localhost/autoresponders.php >> /var/log/cron.log 2>&1
+
+# import csv
+*/1 * * * * curl -i http://localhost/import-csv.php >> /var/log/cron.log 2>&1
