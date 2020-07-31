@@ -108,6 +108,9 @@ _main() {
     docker_verify_minimum_env
     log_info "Let's kick the tires and light the fires!"
     log_info "Starting Apache2"
+    # Start cron
+    cron -f &
+    log_info "Starting cron"
     exec "$@"
   else
     log_info "Comamnd-line override.  Executing: $@"

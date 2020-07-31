@@ -14,8 +14,8 @@ ARG SENDY_VER=4.1.0
 ENV SENDY_VERSION ${SENDY_VER}
 
 RUN apt -qq update && apt -qq upgrade -y \
-  # Install unzip
-  && apt -qq install -y unzip  \
+  # Install unzip cron
+  && apt -qq install -y unzip cron  \
   # Install php extension gettext
   # Install php extension mysqli
   && docker-php-ext-install gettext mysqli \
@@ -43,6 +43,15 @@ RUN a2enconf serverName
 
 # Apache modules
 RUN a2enmod rewrite headers
+
+# Copy hello-cron file to the cron.d directory
+COPY cron /etc/cron.d/cron
+# Give execution rights on the cron job
+RUN chmod 0644 /etc/cron.d/cron
+# Apply cron job
+RUN crontab /etc/cron.d/cron
+# Create the log file to be able to run tail
+RUN touch /var/log/cron.log
 
 COPY artifacts/docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
