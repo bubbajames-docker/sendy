@@ -11,7 +11,9 @@
 # $ docker run --rm -d --env-file sendy.env sendy:latest
 
 FROM php:7.4.8-apache as sendy
-ARG SENDY_VER=4.1.0
+
+ARG SENDY_VER=4.1.0.1
+ARG ARTIFACT_DIR=4.1.0
 
 ENV SENDY_VERSION ${SENDY_VER}
 
@@ -25,7 +27,7 @@ RUN apt -qq update && apt -qq upgrade -y \
   && apt autoremove -y 
 
 # Copy artifacts
-COPY ./artifacts/${SENDY_VER}/ /tmp
+COPY ./artifacts/${ARTIFACT_DIR}/ /tmp
 
 # Install Sendy
 RUN unzip /tmp/sendy-${SENDY_VER}.zip -d /tmp \
