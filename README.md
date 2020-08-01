@@ -65,7 +65,7 @@ Pretty minimalistic `Dockerfile` as everything you need is already bundled.  Jus
 FROM bubbajames/sendy:4.1
 
 # ... additional apache/php configurations here ... 
-# e.g. copy your SSL Certiciate and apache configurations if not using load balancer.  
+# e.g. copy your SSL Certificate and apache configurations if not using a load balancer.  
 ```
 ### Start a Sendy instance
 The following starts an instance specifying an environment file.
@@ -85,9 +85,9 @@ MYSQL_PASSWORD_FILE=/run/secrets/db_password
 ```
 
 ## Using `docker-compose`
-Starts an HAProxy load balancer instance for ssl termination, a Sendy instance and a MySQL database instance with mounted volume for persisted data between restarts.  Also uses Docker Secrets to avoid exposing sensitive data via 'inspect'.
+Starts an HAProxy load balancer instance for SSL termination, a Sendy instance and a MySQL database instance with mounted volume for persisted data between restarts.  Also uses Docker Secrets to avoid exposing sensitive data via 'inspect'.
 
-The latest `docker-compose.yml` and sample files are available from image [repository](https://github.com/bubbajames-docker/sendy).  It is highly adviced to clone this repository to ensure latest samples are used.
+The latest `docker-compose.yml` and sample files are available from the image [repository](https://github.com/bubbajames-docker/sendy).  It is highly advised to clone this repository to ensure the latest samples are used.
 
 ```yaml
 version: "3.7"
@@ -162,6 +162,17 @@ $ docker-compose up -d
 ```console
 $ docker-compose down
 ```
+# Crontab Support
+Crontab is installed and configured with the following jobs.
+
+## Scheduled Campaigns
+Schedule your marketing campaigns to send at specific times in the future.  This job executes every 5 minutes to determine if any campaigns should be started.
+
+## Autoresponders
+Set up autoresponders to incoming emails.  This job executes every 1 minute to determine if any emails require an autoresponse.
+
+## Import Lists
+Import list of contacts in CSV files.  This job executes every 1 minute to determine if any Import List jobs have been created and initiate CSV file import if needed.
 
 # Shoutouts 
 ## Brad Touesnard
