@@ -37,7 +37,9 @@ $ docker run -d \
 ```
 ... where `sendy` is the name you want to assign to your container, `campaigns.example.com` is your FQDN of Sendy server, `db_sendy` is your database server instance, `db_password` is the database user's password and `tag` is the tag specifying the Sendy version you want. See the list of tags above.
 
-## Environment Varaibles   
+## Environment Varaibles 
+### `SENDY_PROTOCOL` (Optional)  
+HTTP protocol used in Sendy APP_PATH (`http` or `https`). Default: `http` 
 ### `SENDY_FQDN` (required)
 The fully qualified domain name of your Sendy installation.  This must match the FQDN associated with your license.  You can [purchase a license here](https://sendy.co/?ref=Hcurv).   
 ### `MYSQL_HOST` (required) 
@@ -50,7 +52,7 @@ Database user.  Default: `sendy`.
 Database user's password. Not recommended for sensitive data! (see: Docker Secrets)
 
 ## Docker Secrets
-As an alternative to passing sensitive information via environment variables, `_FILE` may be appended to the previously listed environment variables, causing the initialization script to load the values for those variables from files present in the container. In particular, this can be used to load passwords from Docker secrets stored in /run/secrets/\<secret_name> files. 
+As an alternative to passing sensitive information via environment variables, `_FILE` may be appended to the previously listed environment variables, causing the initialization script to load the values for those variables from files present in the container. In particular, this can be used to load passwords from Docker secrets stored in /run/secrets/\<secret_name> files. (See [repository](https://github.com/bubbajames-docker/sendy) for sample secrets)
 
 For example:
 
@@ -64,13 +66,14 @@ Pretty minimalistic `Dockerfile` as everything you need is already bundled.  Jus
 ```dockerfile
 FROM bubbajames/sendy:4.1
 
-# ... whatever you want here.   
+# ... additional apache/php configurations here ... 
+# e.g. copy your SSL Certiciate and apache configurations if not using load balancer.  
 ```
 ### Start a Sendy instance
 The following starts an instance specifying an environment file.
 
 ```console
-$ docker run -d -name sendy --env_file sendy.env sendy
+$ docker run -d -name sendy --env_file sendy.env -p 80:80 sendy
 ```
 
 ### Sample environment file
@@ -84,9 +87,9 @@ MYSQL_PASSWORD_FILE=/run/secrets/db_password
 ```
 
 ## Using `docker-compose`
-Starts a Send instance and a MySQL database instance with mounted volume for persisted data between restarts.  Also uses Docker Secrets to avoid exposing sensitive data via 'inspect'.
+Starts an HAProxy load balancer instance for ssl termination, a Sendy instance and a MySQL database instance with mounted volume for persisted data between restarts.  Also uses Docker Secrets to avoid exposing sensitive data via 'inspect'.
 
-The following `docker-compose.yml` is also available from image [repository](https://raw.githubusercontent.com/bubbajames-docker/sendy/master/docker-compose.yml).
+The latest `docker-compose.yml` and sample files are available from image [repository](https://github.com/bubbajames-docker/sendy).  It is highly adviced to clone this repository to ensure latest samples are used.
 
 ```yaml
 version: "3.7"
@@ -110,11 +113,10 @@ services:
     hostname: db_sendy
     container_name: db_sendy
     image: mysql:5.6
+    env_file: 
+      - sendy.env
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      MYSQL_DATABASE: sendy
-      MYSQL_USER: sendy
-      MYSQL_PASSWORD_FILE: /run/secrets/db_password
     secrets:
       - db_root_password
       - db_password      
@@ -127,20 +129,33 @@ services:
     container_name: sendy
     depends_on: 
       - db_sendy
-    image: sendy:latest
+    image: sendy:4.1.0
     build: 
       context: .
-    environment:
-      SENDY_FQDN: campaigns.example.com
-      MYSQL_HOST: db_sendy
-      MYSQL_DATABASE: sendy
-      MYSQL_USER: sendy
-      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      # Uncomment to enabled XDEBUG build
+      # target: debug
+    env_file: 
+      - sendy.env
     secrets:
       - db_password 
     ports:
+      - 8080:80
+
+  # Load Balancer: HAProxy
+  load-balancer:
+    hostname: lb_sendy
+    container_name: lb_sendy
+    image: lb_sendy
+    build:
+      context: .
+      dockerfile: haproxy/Dockerfile   
+    env_file: 
+      - sendy.env      
+    ports:
       - 80:80
+      - 443:443
 ```
+
 ### Start the services
 ```console
 $ docker-compose up -d

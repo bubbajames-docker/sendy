@@ -55,6 +55,7 @@ _is_sourced() {
 docker_setup_env() {
   log_info "Initializing environment variables..."
   # Initialize values that might be stored in a file
+  file_env 'SENDY_PROTOCOL' 'http'
   file_env 'SENDY_FQDN'
   file_env 'MYSQL_HOST'
   file_env 'MYSQL_DATABASE' 'sendy'

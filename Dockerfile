@@ -2,13 +2,15 @@
 # Docker with Sendy Email Campaign Marketing
 #
 # Build:
-# $ docker build -t sendy:latest -f ./Dockerfile .
+# $ docker build -t sendy:latest --target sendy -f ./Dockerfile .
+#
+# Build w/ XDEBUG installed
+# $ docker build -t sendy:debug-latest --target debug -f ./Dockerfile .
 #
 # Run:
-# $ docker run --rm -d sendy:latest
+# $ docker run --rm -d --env-file sendy.env sendy:latest
 
-FROM php:7.4.8-apache
-
+FROM php:7.4.8-apache as sendy
 ARG SENDY_VER=4.1.0
 
 ENV SENDY_VERSION ${SENDY_VER}
@@ -31,6 +33,7 @@ RUN unzip /tmp/sendy-${SENDY_VER}.zip -d /tmp \
   && chmod 777 /tmp/sendy/uploads \
   && rm -rf /var/www/html \
   && mv /tmp/sendy /var/www/html \
+  && mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
   && rm -rf /tmp/* \
   && echo "\nServerName \${SENDY_FQDN}" > /etc/apache2/conf-available/serverName.conf \
   # Ensure X-Powered-By is always removed regardless of php.ini or other settings.
@@ -47,12 +50,22 @@ RUN a2enmod rewrite headers
 # Copy hello-cron file to the cron.d directory
 COPY cron /etc/cron.d/cron
 # Give execution rights on the cron job
-RUN chmod 0644 /etc/cron.d/cron
-# Apply cron job
-RUN crontab /etc/cron.d/cron
-# Create the log file to be able to run tail
-RUN touch /var/log/cron.log
+RUN chmod 0644 /etc/cron.d/cron \
+  # Apply cron job
+  && crontab /etc/cron.d/cron \
+  # Create the log file to be able to run tail
+  && touch /var/log/cron.log
 
 COPY artifacts/docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["apache2-foreground"]
+
+#######################
+# XDEBUG Installation
+#######################
+FROM sendy as debug
+# Install xdebug extension
+RUN pecl channel-update pecl.php.net \
+  && pecl install xdebug \
+  && docker-php-ext-enable xdebug \
+  && rm -rf /tmp/pear 

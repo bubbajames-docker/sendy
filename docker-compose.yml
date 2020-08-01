@@ -19,11 +19,10 @@ services:
     hostname: db_sendy
     container_name: db_sendy
     image: mysql:5.6
+    env_file: 
+      - sendy.env
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      MYSQL_DATABASE: sendy
-      MYSQL_USER: sendy
-      MYSQL_PASSWORD_FILE: /run/secrets/db_password
     secrets:
       - db_root_password
       - db_password      
@@ -39,14 +38,25 @@ services:
     image: sendy:latest
     build: 
       context: .
-    environment:
-      SENDY_FQDN: campaigns.example.com
-      MYSQL_HOST: db_sendy
-      MYSQL_DATABASE: sendy
-      MYSQL_USER: sendy
-      MYSQL_PASSWORD_FILE: /run/secrets/db_password
-      XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9002 remote_enable=1 remote_autostart=1
+      # Uncomment to enabled XDEBUG build
+      # target: debug
+    env_file: 
+      - sendy.env
     secrets:
       - db_password 
     ports:
+      - 8080:80
+
+  # Load Balancer: HAProxy
+  load-balancer:
+    hostname: lb_sendy
+    container_name: lb_sendy
+    image: lb_sendy
+    build:
+      context: .
+      dockerfile: haproxy/Dockerfile   
+    env_file: 
+      - sendy.env      
+    ports:
       - 80:80
+      - 443:443
