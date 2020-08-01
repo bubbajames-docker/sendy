@@ -91,6 +91,7 @@ Starts an HAProxy load balancer instance for ssl termination, a Sendy instance a
 
 The latest `docker-compose.yml` and sample files are available from image [repository](https://github.com/bubbajames-docker/sendy).  It is highly adviced to clone this repository to ensure latest samples are used.
 
+
 ```yaml
 version: "3.7"
 
@@ -164,6 +165,12 @@ $ docker-compose up -d
 ```console
 $ docker-compose down
 ```
+
+
+# Shoutouts 
+## Brad Touesnard
+Please read Brad Touesnard's article [How to Create Your Own SSL Certificate Authority for Local HTTPS Development](https://deliciousbrains.com/ssl-certificate-authority-for-local-https-development/) which inspired the `generateSSLCerticate.sh` script used in this project. 
+
 
 # License
 
