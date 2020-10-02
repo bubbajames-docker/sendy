@@ -32,7 +32,8 @@ COPY ./artifacts/${ARTIFACT_DIR}/ /tmp
 # Install Sendy
 RUN unzip /tmp/sendy-${SENDY_VER}.zip -d /tmp \
   && cp -r /tmp/includes/* /tmp/sendy/includes \
-  && chmod 777 /tmp/sendy/uploads \
+  && mkdir -p /tmp/sendy/uploads/csvs \
+  && chmod -R 777 /tmp/sendy/uploads \
   && rm -rf /var/www/html \
   && mv /tmp/sendy /var/www/html \
   && mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
