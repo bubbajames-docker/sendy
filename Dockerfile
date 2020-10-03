@@ -42,7 +42,8 @@ RUN unzip /tmp/sendy-${SENDY_VER}.zip -d /tmp \
   # Ensure X-Powered-By is always removed regardless of php.ini or other settings.
   && printf "\n\n# Ensure X-Powered-By is always removed regardless of php.ini or other settings.\n\
 Header always unset \"X-Powered-By\"\n\
-Header unset \"X-Powered-By\"\n" >> /var/www/html/.htaccess
+Header unset \"X-Powered-By\"\n" >> /var/www/html/.htaccess \
+  && printf "[PHP]\nerror_reporting = E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED\n" > /usr/local/etc/php/conf.d/error_reporting.ini
 
 # Apache config
 RUN a2enconf serverName
