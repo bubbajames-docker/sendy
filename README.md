@@ -48,6 +48,8 @@ The Sendy database name. Default: `sendy`.
 Database user.  Default: `sendy`.   
 ### `MYSQL_PASSWORD` (required)
 Database user's password. Not recommended for sensitive data! (see: Docker Secrets)
+### `SENDY_DB_PORT` (optional)
+Database port. Default: `3306`. 
 
 ## Docker Secrets
 As an alternative to passing sensitive information via environment variables, `_FILE` may be appended to the previously listed environment variables, causing the initialization script to load the values for those variables from files present in the container. In particular, this can be used to load passwords from Docker secrets stored in /run/secrets/\<secret_name> files. (See [repository](https://github.com/bubbajames-docker/sendy) for sample secrets)
