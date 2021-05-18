@@ -12,8 +12,8 @@
 
 FROM php:7.4.8-apache as sendy
 
-ARG SENDY_VER=4.1.0.1
-ARG ARTIFACT_DIR=4.1.0
+ARG SENDY_VER=5.2
+ARG ARTIFACT_DIR=5.2.0
 
 ENV SENDY_VERSION ${SENDY_VER}
 
@@ -28,7 +28,7 @@ RUN apt -qq update && apt -qq upgrade -y \
 
 # Copy artifacts
 COPY ./artifacts/${ARTIFACT_DIR}/ /tmp
-
+COPY ./secrets/ /secrets
 # Install Sendy
 RUN unzip /tmp/sendy-${SENDY_VER}.zip -d /tmp \
   && cp -r /tmp/includes/* /tmp/sendy/includes \
