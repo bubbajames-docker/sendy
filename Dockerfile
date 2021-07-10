@@ -28,7 +28,7 @@ RUN apt -qq update && apt -qq upgrade -y \
 
 # Copy artifacts
 COPY ./artifacts/${ARTIFACT_DIR}/ /tmp
-COPY ./secrets/ /secrets
+
 # Install Sendy
 RUN unzip /tmp/sendy-${SENDY_VER}.zip -d /tmp \
   && cp -r /tmp/includes/* /tmp/sendy/includes \
