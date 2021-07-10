@@ -64,7 +64,7 @@ $ docker run -d --name sendy -e MYSQL_PASSWORD_FILE=/run/secrets/mysql-root -d s
 Pretty minimalistic `Dockerfile` as everything you need is already bundled.  Just provide environment variables or environment file.
 
 ```dockerfile
-FROM bubbajames/sendy:4.1
+FROM bubbajames/sendy:5.2
 
 # ... additional apache/php configurations here ... 
 # e.g. copy your SSL Certificate and apache configurations if not using a load balancer.  
@@ -103,9 +103,9 @@ volumes:
 # Secret files so they're not exposed via 'docker inspect'
 secrets:
   db_password:
-    file: secrets/db_password.txt
+    file: secrets/db_password
   db_root_password:
-    file: secrets/db_root_password.txt      
+    file: secrets/db_root_password    
 
 services:
   # Database: MySQL
@@ -129,7 +129,7 @@ services:
     container_name: sendy
     depends_on: 
       - db_sendy
-    image: sendy:4.1.0
+    image: sendy:5.2
     build: 
       context: .
       # Uncomment to enabled XDEBUG build
