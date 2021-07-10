@@ -1,17 +1,17 @@
 version: "3.7"
 
 # Volumes for persisted data.
-volumes: 
+volumes:
   data_sendy:
-    labels: 
+    labels:
       co.sendy.description: "Data volume for Sendy Database."
 
 # Secret files so they're not exposed via 'docker inspect'
 secrets:
   db_password:
-    file: secrets/db_password.txt
+    file: secrets/db_password
   db_root_password:
-    file: secrets/db_root_password.txt      
+    file: secrets/db_root_password
 
 services:
   # Database: MySQL
@@ -19,31 +19,31 @@ services:
     hostname: db_sendy
     container_name: db_sendy
     image: mysql:5.6
-    env_file: 
+    env_file:
       - sendy.env
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
     secrets:
       - db_root_password
-      - db_password      
-    volumes: 
+      - db_password
+    volumes:
       - data_sendy:/var/lib/mysql
 
   # WebApp: Apache2+PHP+Sendy
   sendy:
     hostname: sendy
     container_name: sendy
-    depends_on: 
+    depends_on:
       - db_sendy
     image: sendy:latest
-    build: 
+    build:
       context: .
       # Uncomment to enabled XDEBUG build
       # target: debug
-    env_file: 
+    env_file:
       - sendy.env
     secrets:
-      - db_password 
+      - db_password
     ports:
       - 8080:80
 
@@ -54,9 +54,9 @@ services:
     image: lb_sendy
     build:
       context: .
-      dockerfile: haproxy/Dockerfile   
-    env_file: 
-      - sendy.env      
+      dockerfile: haproxy/Dockerfile
+    env_file:
+      - sendy.env
     ports:
       - 80:80
       - 443:443

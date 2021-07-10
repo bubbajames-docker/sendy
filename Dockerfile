@@ -22,13 +22,13 @@ RUN apt -qq update && apt -qq upgrade -y \
   && apt -qq install -y unzip cron  \
   # Install php extension gettext
   # Install php extension mysqli
-  && docker-php-ext-install gettext mysqli \
+  && docker-php-ext-install calendar gettext mysqli \
   # Remove unused packages
   && apt autoremove -y 
 
 # Copy artifacts
 COPY ./artifacts/${ARTIFACT_DIR}/ /tmp
-
+COPY ./secrets/ /secrets
 # Install Sendy
 RUN unzip /tmp/sendy-${SENDY_VER}.zip -d /tmp \
   && cp -r /tmp/includes/* /tmp/sendy/includes \
