@@ -10,6 +10,8 @@
 # Run:
 # $ docker run --rm -d --env-file sendy.env sendy:latest
 
+SHELL ["/bin/bash", "-c"]
+
 FROM php:7.4.8-apache as sendy
 
 ARG SENDY_VER=6.0.1.1
