@@ -36,6 +36,7 @@ RUN unzip /tmp/sendy-${SENDY_VER}.zip -d /tmp \
   && chmod -R 777 /tmp/sendy/uploads \
   && rm -rf /var/www/html \
   && mv /tmp/sendy /var/www/html \
+  && chown -R www-data:www-data /var/www \
   && mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
   && rm -rf /tmp/* \
   && echo "\nServerName \${SENDY_FQDN}" > /etc/apache2/conf-available/serverName.conf \
@@ -75,4 +76,3 @@ RUN pecl channel-update pecl.php.net \
   && rm -rf /tmp/pear 
 
 
-RUN chown -R www-data:www-data /var/www
