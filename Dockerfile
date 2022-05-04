@@ -10,9 +10,9 @@
 # Run:
 # $ docker run --rm -d --env-file sendy.env sendy:latest
 
-SHELL ["/bin/bash", "-c"]
-
 FROM php:7.4.8-apache as sendy
+
+SHELL ["/bin/bash", "-c"]
 
 ARG SENDY_VER=6.0.1.1
 ARG ARTIFACT_DIR=6.0.1.1
@@ -76,4 +76,5 @@ RUN pecl channel-update pecl.php.net \
   && docker-php-ext-enable xdebug \
   && rm -rf /tmp/pear 
 
-
+RUN chown -R www-data:www-data /var/www
+USER www-data
