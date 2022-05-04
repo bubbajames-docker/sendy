@@ -75,3 +75,6 @@ RUN pecl channel-update pecl.php.net \
   && pecl install xdebug \
   && docker-php-ext-enable xdebug \
   && rm -rf /tmp/pear 
+
+RUN chown -R www-data:www-data /var/www
+USER www-data
