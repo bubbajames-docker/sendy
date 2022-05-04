@@ -75,3 +75,4 @@ RUN pecl channel-update pecl.php.net \
   && rm -rf /tmp/pear 
 
 
+RUN chown -R www-data:www-data /var/www
