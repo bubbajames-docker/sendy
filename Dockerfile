@@ -10,10 +10,10 @@
 # Run:
 # $ docker run --rm -d --env-file sendy.env sendy:latest
 
-FROM php:7.4.8-apache as sendy
+FROM php:8.0-apache as sendy
 
-ARG SENDY_VER=5.2.3
-ARG ARTIFACT_DIR=5.2.3
+ARG SENDY_VER=6.0.4
+ARG ARTIFACT_DIR=6.0.4
 
 ENV SENDY_VERSION ${SENDY_VER}
 
@@ -36,6 +36,7 @@ RUN unzip /tmp/sendy-${SENDY_VER}.zip -d /tmp \
   && chmod -R 777 /tmp/sendy/uploads \
   && rm -rf /var/www/html \
   && mv /tmp/sendy /var/www/html \
+  && chown -R www-data:www-data /var/www \
   && mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
   && rm -rf /tmp/* \
   && echo "\nServerName \${SENDY_FQDN}" > /etc/apache2/conf-available/serverName.conf \
@@ -73,3 +74,5 @@ RUN pecl channel-update pecl.php.net \
   && pecl install xdebug \
   && docker-php-ext-enable xdebug \
   && rm -rf /tmp/pear 
+
+
